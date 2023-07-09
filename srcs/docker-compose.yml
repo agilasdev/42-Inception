@@ -1,0 +1,60 @@
+version: '3'
+
+network:
+  inception:
+    driver: bridge
+
+volumes:
+  wordpress_db:
+      driver_opts:
+        type: 
+        o: 
+        device: /
+  wordpress_httpdocs:
+      driver_opts:
+        type: 
+        o: 
+        device: /
+
+services:
+  nginx:
+    build:
+      contest: ./requirements/nginx
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 443:443
+    depends_on:
+      - wordpress
+    volumes:
+      - wordpress:/
+    network:
+      - inception
+
+  wordpress:
+    build:
+      contest: ./requirements/wordpress
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 9000:9000
+    volumes:
+      - wordpress_httpdocs
+    depends_on:
+      - nginx
+    network:
+      - inception
+
+  mariadb:
+    build:
+      contest: ./requirements/mariadb
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 3306:3306
+    volumes:
+      - word_press_db
+    depends_on:
+      - wordpress
+    network:
+      - inception
