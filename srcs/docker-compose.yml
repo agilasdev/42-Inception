@@ -5,56 +5,62 @@ network:
     driver: bridge
 
 volumes:
-  wordpress_db:
-      driver_opts:
-        type: 
-        o: 
-        device: /
-  wordpress_httpdocs:
-      driver_opts:
-        type: 
-        o: 
-        device: /
+  db:
+    driver_opts:
+      type: local
+      o: bind
+      device: ${DB_DATA_PATH}
+  # web:
+  #   driver_opts:
+  #     type: local
+  #     o: bind
+  #     device: ${WEB_DATA_PATH}
 
 services:
-  nginx:
-    build:
-      contest: ./requirements/nginx
-      dockerfile: Dockerfile
-    restart: always
-    ports:
-      - 443:443
-    depends_on:
-      - wordpress
-    volumes:
-      - wordpress:/
-    network:
-      - inception
-
-  wordpress:
-    build:
-      contest: ./requirements/wordpress
-      dockerfile: Dockerfile
-    restart: always
-    ports:
-      - 9000:9000
-    volumes:
-      - wordpress_httpdocs
-    depends_on:
-      - nginx
-    network:
-      - inception
-
   mariadb:
     build:
-      contest: ./requirements/mariadb
+      context: ./requirements/mariadb
       dockerfile: Dockerfile
-    restart: always
+    restart: on-failure
     ports:
       - 3306:3306
     volumes:
-      - word_press_db
+      - db
     depends_on:
       - wordpress
     network:
       - inception
+    env_file:
+      - .env
+
+  # nginx:
+  #   build:
+  #     context: ./requirements/nginx
+  #     dockerfile: Dockerfile
+  #   restart: on-failure
+  #   ports:
+  #     - 443:443
+  #   depends_on:
+  #     - wordpress
+  #   volumes:
+  #     - web:/nginx
+  #   network:
+  #     - inception
+  #   env_file:
+  #     - .env
+
+  # wordpress:
+  #   build:
+  #     context: ./requirements/wordpress
+  #     dockerfile: Dockerfile
+  #   restart: on-failure
+  #   ports:
+  #     - 9000:9000
+  #   volumes:
+  #     - web:/wordpress
+  #   depends_on:
+  #     - nginx
+  #   network:
+  #     - inception
+  #   env_file:
+  #     - .env
