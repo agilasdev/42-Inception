@@ -5,11 +5,11 @@ then
 
 service mariadb start;
 echo "CREATE DATABASE $DB_NAME;" > /tmp/db.sql;
-echo "CREATE USER $DB_USER identified by '$DB_USER_PWD';" >> /tmp/db.sql;
-echo "grant all privileges on $DB_NAME.* TO '$DB_USER'@'%';" >> /tmp/db.sql;
+echo "CREATE USER '$DB_USER'@'%' IDENTIFIED BY '$DB_USER_PWD';" >> /tmp/db.sql;
+echo "GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USER'@'%';" >> /tmp/db.sql;
+echo "ALTER USER 'root'@'127.0.0.1' IDENTIFIED BY '$MYSQL_ROOT_PWD';";
 echo "FLUSH PRIVILEGES;" >> /tmp/db.sql;
-echo "ALTER USER 'root'@'localhost' identified by '$MYSQL_ROOT_PWD';"
-mysql < /tmp/db.sql;
+mysql -u root < /tmp/db.sql;
 
 sleep 3;
 fi

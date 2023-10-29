@@ -27,7 +27,7 @@ services:
     networks:
       - inception
     depends_on:
-      - mariadb
+      - wordpress
     env_file:
       - .env
 
@@ -39,11 +39,11 @@ services:
     ports:
       - 9000:9000
     volumes:
-      - wp:/var/www/html/wordpress
+      - wp:/var/www/html/
     networks:
       - inception
     depends_on:
-      - nginx
+      - mariadb
     env_file:
       - .env
 

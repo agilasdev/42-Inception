@@ -1,7 +1,8 @@
-FROM debian:12.2
-
-COPY ./tools/script.sh /tmp/script.sh
+FROM debian:12
 
 RUN apt update -y && apt install -y mariadb-server
 
-ENTRYPOINT ["/bin/bash", "/tmp/script.sh"]
+COPY ./tools/script.sh /tmp/
+COPY ./conf/50-server.cnf /etc/mysql/mariadb.conf.d/
+
+CMD ["/bin/bash", "/tmp/script.sh"]
