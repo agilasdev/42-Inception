@@ -10,9 +10,10 @@ You need to have `Git`, `GNU make`, `Docker` and `Docker Compose` installed in y
 ## Installation
 Copy and paste command in your Terminal
 ```
-cd ~ & git clone https://github.com/agilasdev/42-Inception.git
+cd ~ & git clone https://github.com/agilasdev/42-Inception.git inception
 ```
 ## Usage
+Copy and paste command in your Terminal
 ```
-cd ~/42-Inception & make
+cd ~/inception & make
 ```
