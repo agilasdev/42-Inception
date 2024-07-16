@@ -5,3 +5,6 @@ One of project from 42 school education system aims to learn system administrati
 ## Docker
 ## Docker Compose
 # How does it work:
+## Requirements
+## Installation
+## Usage
