@@ -1,7 +1,11 @@
-FROM debian:latest
+FROM debian:12
 
-COPY ./tools/script.sh /script.sh
+RUN apt update -y && apt install -y nano wget unzip php php-fpm php-mysqli sendmail
 
-RUN 
+COPY ./tools/script.sh /tmp/
+#COPY ./conf/wp-config.php /
+COPY ./conf/www.conf /etc/php/8.2/fpm/pool.d/
 
-CMD "./script.sh"
+CMD ["/bin/bash", "/tmp/script.sh"]
+
+

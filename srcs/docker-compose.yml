@@ -1,21 +1,5 @@
 version: '3'
 
-network:
-  inception:
-    driver: bridge
-
-volumes:
-  db:
-    driver_opts:
-      type: local
-      o: bind
-      device: ${DB_DATA_PATH}
-  # web:
-  #   driver_opts:
-  #     type: local
-  #     o: bind
-  #     device: ${WEB_DATA_PATH}
-
 services:
   mariadb:
     build:
@@ -25,42 +9,58 @@ services:
     ports:
       - 3306:3306
     volumes:
-      - db
-    depends_on:
-      - wordpress
-    network:
+      - db:/var/lib/mysql
+    networks:
       - inception
     env_file:
       - .env
 
-  # nginx:
-  #   build:
-  #     context: ./requirements/nginx
-  #     dockerfile: Dockerfile
-  #   restart: on-failure
-  #   ports:
-  #     - 443:443
-  #   depends_on:
-  #     - wordpress
-  #   volumes:
-  #     - web:/nginx
-  #   network:
-  #     - inception
-  #   env_file:
-  #     - .env
+  nginx:
+    build:
+      context: ./requirements/nginx
+      dockerfile: Dockerfile
+    restart: on-failure
+    ports:
+      - 443:443
+    volumes:
+      - wp:/var/www/html
+    networks:
+      - inception
+    depends_on:
+      - wordpress
+    env_file:
+      - .env
 
-  # wordpress:
-  #   build:
-  #     context: ./requirements/wordpress
-  #     dockerfile: Dockerfile
-  #   restart: on-failure
-  #   ports:
-  #     - 9000:9000
-  #   volumes:
-  #     - web:/wordpress
-  #   depends_on:
-  #     - nginx
-  #   network:
-  #     - inception
-  #   env_file:
-  #     - .env
+  wordpress:
+    build:
+      context: ./requirements/wordpress
+      dockerfile: Dockerfile
+    restart: on-failure
+    ports:
+      - 9000:9000
+    volumes:
+      - wp:/var/www/html/
+    networks:
+      - inception
+    depends_on:
+      - mariadb
+    env_file:
+      - .env
+
+networks:
+  inception:
+    driver: bridge
+
+volumes:
+  db:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${db_vol}
+  wp:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${wp_vol}

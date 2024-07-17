@@ -1,9 +1,7 @@
-FROM debian:latest
+FROM debian:12
 
-COPY ./tools/script.sh /script.sh
+RUN apt update -y && apt install -y nginx openssl
 
-RUN apt update -y && apt install nginx -y
+COPY ./tools/script.sh /tmp/
 
-RUN ufw allow 'Nginx HTTPS'
-
-CMD "./script.sh"
+CMD ["/bin/bash", "/tmp/script.sh"]
