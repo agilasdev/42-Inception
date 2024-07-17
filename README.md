@@ -9,12 +9,10 @@ A `Dockerized environment` for managing a `Wordpress` website. It leverages `Doc
 You need to have `Git`, `GNU make`, `Docker` and `Docker Compose` installed in your machine.
 # 🚀 Getting Started
 * Installation
-Copy and paste command in your Terminal
 ```
 cd ~ & git clone https://github.com/agilasdev/42-Inception.git inception
 ```
 * Usage
-Copy and paste command in your Terminal
 ```
 cd ~/inception & make
 ```
